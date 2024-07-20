@@ -4,8 +4,18 @@ from datetime import datetime
 import string
 
 class TestWeekday(unittest.TestCase):
-    def test_weekday(self):
-        self.assertEqual(weekday(), f"{datetime.today():%A}")
+    def test_weekday_saturday(self):
+        dt = datetime(year=2024, month=7, day=20)
+        self.assertEqual(weekday(dt), "Saturday")
+    def test_weekday_monday(self):
+        dt = datetime(year=2024, month=7, day=22)
+        self.assertEqual(weekday(dt), "Monday")
+    def test_weekday_tuesday(self):
+        dt = datetime(year=2024, month=7, day=23)
+        self.assertEqual(weekday(dt), "Tuesday")
+    def test_weekday_thursday(self):
+        dt = datetime(year=2024, month=7, day=18)
+        self.assertEqual(weekday(dt), "Thursday")
 
 class TestGenerateId(unittest.TestCase):
     def test_generate_id_length(self):
