@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actor Search</title>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+</head>
+<body>
+    <h1>Actor Search</h1>
+    
+    <div style="display: flex;">
+        <form id="searchForm"></form>
+            <label for="actor1">Actor 1:</label>
+            <input type="text" id="actor1" name="actor1" required>
+            <br>
+            <label for="actor2">Actor 2:</label>
+            <input type="text" id="actor2" name="actor2" required>
+            <br>
+            <button hx-post="/actors/search" hx-trigger="changed delay:500ms" hx-target="#submitBtn">Search</button>
+        </form>
+        
+        <div id="submitBtn" hx-swap="outerHTML" style="display: none;">
+            <button hx-get="/celeb_search" hx-trigger="click" hx-target="#result" hx-swap="innerHTML">Submit</button>
+        </div>
+    </div>
+    
+    <div id="submitBtn" hx-swap="outerHTML" style="display: none;">
+        <button hx-get="/celeb_search" hx-trigger="click" hx-target="#result" hx-swap="innerHTML">Submit</button>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('searchForm').addEventListener('htmx:configRequest', function (event) {
+            event.detail.headers['Content-Type'] = 'application/json';
+        });
+        
+        document.getElementById('submitBtn').addEventListener('htmx:configRequest', function (event) {
+            event.detail.headers['Accept'] = 'application/json';
+        });
+        
+        document.getElementById('result').addEventListener('htmx:afterSwap', function (event) {
+            var response = JSON.parse(event.detail.xhr.response);
+            response.forEach(function (line) {
+                var p = document.createElement('p');
+                p.textContent = line;
+                document.getElementById('result').appendChild(p);
+            });
+        });
+    </script>
+</body>
+</html>
